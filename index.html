@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        // Set theme on page load
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'DM Sans', sans-serif;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Staggered animation for list items */
+        .project-item {
+            animation: fadeIn 0.8s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body class="antialiased bg-[#F8F8F7] dark:bg-stone-900 text-stone-800 dark:text-stone-300 transition-colors duration-300">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-10 bg-transparent">
+        <div class="container mx-auto px-6 md:px-10 py-6 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold tracking-wide text-black dark:text-white">Your Name</a>
+            <nav class="flex items-center space-x-6">
+                <a href="mailto:your.email@example.com" class="text-lg text-stone-600 hover:text-black dark:text-stone-400 dark:hover:text-white transition-colors duration-300">Contact</a>
+                <button id="theme-toggle" type="button" class="text-stone-600 dark:text-stone-400 hover:text-black dark:hover:text-white transition-colors duration-300">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 3.636l-.707.707a1 1 0 101.414 1.414l.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 14.95l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 md:px-10">
+
+        <!-- Hero Section -->
+        <section id="about" class="min-h-screen flex flex-col justify-center section-fade-in">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tighter text-black dark:text-white mb-6">
+                    I design and build beautiful, functional web experiences.
+                </h1>
+                <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-400 max-w-3xl">
+                    Passionate [Your Profession/Title] based in [Your City/Country]. I help businesses and individuals bring their ideas to life with clean code and thoughtful design.
+                </p>
+                <div class="mt-10 flex space-x-6">
+                    <a href="[Your GitHub URL]" target="_blank" class="text-stone-500 hover:text-black dark:text-stone-400 dark:hover:text-white transition-colors duration-300">GitHub</a>
+                    <a href="[Your LinkedIn URL]" target="_blank" class="text-stone-500 hover:text-black dark:text-stone-400 dark:hover:text-white transition-colors duration-300">LinkedIn</a>
+                    <a href="[Your Twitter/X URL]" target="_blank" class="text-stone-500 hover:text-black dark:text-stone-400 dark:hover:text-white transition-colors duration-300">Twitter/X</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 md:py-32">
+            <h2 class="text-3xl font-bold mb-12 section-fade-in text-black dark:text-white">Selected Work</h2>
+            <div class="space-y-12">
+                <!-- Project 1 -->
+                <div class="project-item group" style="animation-delay: 100ms;">
+                    <a href="[Link to Project Demo]" target="_blank" class="block">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between py-6 border-b border-stone-200 dark:border-stone-700 group-hover:border-black dark:group-hover:border-white transition-colors duration-300">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 text-black dark:text-white">Project Title One</h3>
+                                <p class="text-lg text-stone-600 dark:text-stone-400">Web Development & Design</p>
+                            </div>
+                            <div class="text-lg text-stone-500 dark:text-stone-500 mt-4 md:mt-0 group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
+                                View Project &rarr;
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Project 2 -->
+                <div class="project-item group" style="animation-delay: 200ms;">
+                    <a href="[Link to Project Demo]" target="_blank" class="block">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between py-6 border-b border-stone-200 dark:border-stone-700 group-hover:border-black dark:group-hover:border-white transition-colors duration-300">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 text-black dark:text-white">Project Title Two</h3>
+                                <p class="text-lg text-stone-600 dark:text-stone-400">Branding & UI/UX</p>
+                            </div>
+                            <div class="text-lg text-stone-500 dark:text-stone-500 mt-4 md:mt-0 group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
+                                View Project &rarr;
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Project 3 -->
+                <div class="project-item group" style="animation-delay: 300ms;">
+                    <a href="[Link to Project Demo]" target="_blank" class="block">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between py-6 border-b border-stone-200 dark:border-stone-700 group-hover:border-black dark:group-hover:border-white transition-colors duration-300">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 text-black dark:text-white">Project Title Three</h3>
+                                <p class="text-lg text-stone-600 dark:text-stone-400">E-commerce Platform</p>
+                            </div>
+                            <div class="text-lg text-stone-500 dark:text-stone-500 mt-4 md:mt-0 group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
+                                View Project &rarr;
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                 <!-- Project 4 -->
+                <div class="project-item group" style="animation-delay: 400ms;">
+                    <a href="[Link to Project Demo]" target="_blank" class="block">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between py-6 border-b border-stone-200 dark:border-stone-700 group-hover:border-black dark:group-hover:border-white transition-colors duration-300">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 text-black dark:text-white">Project Title Four</h3>
+                                <p class="text-lg text-stone-600 dark:text-stone-400">Mobile App Concept</p>
+                            </div>
+                            <div class="text-lg text-stone-500 dark:text-stone-500 mt-4 md:mt-0 group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
+                                View Project &rarr;
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 section-fade-in">
+        <div class="container mx-auto px-6 md:px-10">
+            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-8 md:space-y-0 border-t border-stone-200 dark:border-stone-700 pt-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-2 text-black dark:text-white">Let's work together.</h3>
+                    <a href="mailto:your.email@example.com" class="text-xl text-stone-600 hover:text-black dark:text-stone-400 dark:hover:text-white transition-colors duration-300 underline underline-offset-4">your.email@example.com</a>
+                </div>
+                <div class="text-stone-500 dark:text-stone-500">
+                    <p>&copy; 2024 [Your Name]</p>
+                    <p>All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JS for intersection observer animations
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            const sections = document.querySelectorAll('.section-fade-in, .project-item');
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // JS for theme toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Change the icons inside the button based on previous settings
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            // toggle icons inside button
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // if set via local storage previously
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            // if NOT set via local storage previously
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
