@@ -15,19 +15,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compile LaTeX → PDF
         uses: xu-cheng/latex-action@v3
         with:
           root_file: resume/main.tex
-          # Uses latexmk under the hood; compiles to resume/main.pdf
+          extra_packages: "moderncv fontawesome etoolbox xcolor ifnottex lm pgf multirow arydshln changepage"
 
       - name: Move compiled PDF to assets/
         run: |
           mkdir -p assets
           cp resume/main.pdf assets/resume.pdf
+          echo "✅ PDF compiled successfully ($(du -h assets/resume.pdf | cut -f1))"
 
       - name: Commit & push updated PDF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
