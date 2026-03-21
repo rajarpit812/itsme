@@ -1,65 +1,87 @@
-%-------------------------
-% Resume Template — Replace with your Overleaf content
-% Compile: pdflatex or latexmk
-%-------------------------
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt,a4paper,sans]{moderncv}
 
-\usepackage[margin=0.75in]{geometry}
-\usepackage{enumitem}
-\usepackage{titlesec}
-\usepackage[hidelinks]{hyperref}
-\usepackage{parskip}
+% ModernCV themes
+\moderncvstyle{classic}
+\moderncvcolor{blue}
 
-% Section formatting
-\titleformat{\section}{\large\bfseries\uppercase}{}{0em}{}[\titlerule]
-\titlespacing*{\section}{0pt}{12pt}{6pt}
+% Adjust the page margins
+\usepackage[scale=0.88]{geometry}
+\usepackage{booktabs} % For stylish, minimalist table lines
+
+% Personal Information
+\name{Arpit}{Raj}
 
 \begin{document}
 
-%----------HEADING----------
-\begin{center}
-    {\Huge \textbf{Arpit Raj}} \\[6pt]
-    \href{mailto:rajarpit812@gmail.com}{rajarpit812@gmail.com} \quad | \quad
-    +91 8700725192 \quad | \quad
-    \href{https://www.linkedin.com/in/arpit420/}{LinkedIn} \quad | \quad
-    \href{https://github.com/rajarpit812}{GitHub} \quad | \quad
-    \href{https://arpit.online}{arpit.online}
-\end{center}
+% --- Custom Header Layout ---
+% Left Side: Name and Degree
+\begin{minipage}[t]{0.5\textwidth}
+  \vspace{0pt} % Anchor for top alignment
+    {\Huge\sffamily\bfseries\color{color1} Arpit Raj}\\[0.5em]
+    {\large\color{color2} Bachelor of Technology}\\[0.1em]
+    {\normalsize Electronics \& Communications Engineering}\\[0.1em]
+    {\small\textit{Shri Mata Vaishno Devi University}}\\[0.1em]
+    {\small Katra, Jammu and Kashmir -- 182320}
+\end{minipage}%
+\hfill%
+% Right Side: Contact Info & Address
+\begin{minipage}[t]{0.45\textwidth}
+  \vspace{0pt} % Anchor for top alignment
+  \begin{flushright}
+    \color{color2}\small
+    \href{https://maps.google.com/?q=184+Sector+10,+Gurugram,+India}{\faMapMarker~ 184 Sector 10, Gurugram, India -- 122001} \\[0.4em]
+    \href{tel:+918700725192}{\faPhone~ +91~8700725192} \\[0.4em]
+    \href{mailto:rajrpit812@gmail.com}{\faEnvelope~ rajrpit812@gmail.com} \\[0.4em]
+    \href{https://www.linkedin.com/in/arpit420}{\faLinkedin~ ArpitRaj} \\[0.4em]
+    \href{https://github.com/rajarpit812}{\faGithub~ rajarpit812}
+  \end{flushright}
+\end{minipage}
 
-%----------EDUCATION----------
+\vspace{2.5em}
+% ---------------------------------------------------------
+
 \section{Education}
-\textbf{B.Tech — Electronics and Communication Engineering} \hfill Expected 2026 \\
-Your University Name \hfill City, India
+\cvitem{}{%
+  \renewcommand{\arraystretch}{1.3}% Elegant spacing between rows
+  \begin{tabular}{@{} p{0.44\maincolumnwidth} p{0.38\maincolumnwidth} r @{}}
+  \toprule
+  \textbf{Degree/Certificate} & \textbf{Institute/Board} & \textbf{Year} \\
+  \midrule
+  B.Sc Data Science and Applications & Indian Institute of Technology & 2025--Present \\
+  B.Tech ECE & Shri Mata Vaishno Devi University & 2024--Present \\
+  Senior Secondary (XIIth, PCM) & GAV Public School & 2021--2023 \\
+  Secondary (Xth) & GAV Public School & 2010--2021 \\
+  \bottomrule
+  \end{tabular}%
+}
 
-%----------EXPERIENCE----------
-\section{Experience}
-\textbf{Summer Intern} \hfill Jun 2025 -- Aug 2025 \\
-\textit{Company Name} \hfill City, India
-\begin{itemize}[leftmargin=*, nosep]
-    \item Describe what you did, technologies used, impact achieved.
-    \item Another bullet point about your contributions.
-\end{itemize}
+\section{Experience \& Leadership}
+\cventry{}{Project Leader, C Programming \hfill \textnormal{2024}}{Group Project}{}{}{Spearheaded a group project demonstrating C programming applications, managing team coordination and technical presentations.}
+\cventry{}{Team Leader, PCB Design \hfill \textnormal{2025}}{College Workshop}{}{}{Directed a team in designing and manufacturing a Printed Circuit Board (PCB) using Eagle software.}
+\cventry{}{Quiz Team Leader \hfill \textnormal{2025}}{College Fest}{}{}{Led a team in a technical quiz competition during the annual college technical fest.}
+\cventry{}{University Representative \hfill \textnormal{2025}}{JKEDI Event}{}{}{Represented SMVDU at a JKEDI-organized program, showcasing university innovation and leadership.}
+\cventry{}{College Fest Live Streaming \hfill \textnormal{2025}}{Streaming}{}{}{Volunteered for the live streaming of events using OBS software, managing camera feeds and stream quality.}
+\cventry{}{World Book Fair Volunteering \hfill \textnormal{2026}}{Volunteering}{}{}{Worked in New Delhi world book fair 2026.}
+\cventry{}{IIT Guwahati winter consulting course \hfill \textnormal{2025}}{Course}{}{}{completed my consulting course from IIT Guwahati}{}
 
-%----------PROJECTS----------
 \section{Projects}
-\textbf{Project Title} \hfill \href{https://github.com/rajarpit812/project}{GitHub}
-\begin{itemize}[leftmargin=*, nosep]
-    \item Brief description of the project and key technologies.
-    \item Quantifiable outcome or impact.
-\end{itemize}
+\cventry{}{BJT-Based Wireless AC Current Detector \hfill \textnormal{2024}}{Hardware Design}{}{}{Engineered a circuit utilizing Bipolar Junction Transistors (BJT) to wirelessly detect the presence of an AC current source.}
+\cventry{}{Live Streaming Manager \hfill \textnormal{2024}}{College Fest}{}{}{Managed live event broadcasting using OBS software, ensuring high-quality camera feeds and stream stability.}
+\cventry{}{Capstone Project for Winter Consulting IITG \hfill \textnormal{2025}}{Problem Statement}{}{}{Viewer Retention in OTT Platforms: Diagnosing Engagement Patterns.}
+\cventry{}{8-bit ALU Design \hfill \textnormal{2025}}{}{}{}{Designed 8-bit ALU using verilog to perform different logical and arithmetic operations.}
+\cventry{}{Real-Time Hardware Image Processor}{}{}{}{Developed a high-speed video pipeline on the PYNQ-Z2 to perform real-time image filtering and edge detection using custom Verilog hardware cores.}
+\vspace{0.5em}
 
-%----------SKILLS----------
-\section{Skills}
-\textbf{Languages:} Python, C/C++, VHDL, Verilog, JavaScript \\
-\textbf{Tools:} MATLAB, Xilinx Vivado, Git, \LaTeX \\
-\textbf{Frameworks:} TensorFlow, scikit-learn
+\section{Technical Skills}
+\cvitem{Programming}{C, Python, HTML, SQL, MATLAB, Simulink, Verilog}
+\cvitem{Web Dev}{HTML, CSS}
+\cvitem{Hardware}{PCB Fabrication (Eagle), Arduino uno, Raspberry Pie, ESP-32, PYNQ-Z2 FPGA Board}
+\cvitem{Software}{Canva, Photoshop, AutoCAD, Fusion 360, vivado, multisim, Eagle}
+\cvitem{Tools}{AWS, Google Workspace, Microsoft Workspace, OBS (Video/Stream Editing)}
 
-%----------CERTIFICATIONS----------
-\section{Certifications}
-\begin{itemize}[leftmargin=*, nosep]
-    \item VLSI Design — Internshala (2025)
-    \item Deloitte Australia Technology Consulting — Forage (2025)
-    \item J.P. Morgan Software Engineering — Forage (2025)
-\end{itemize}
+\section{Soft Skills \& Extra-curricular}
+\cvitem{Leadership}{PR management in Aakash house of SMVDU, Lead C programming head, Lead Team of Printed Circuit Board Competition, Udyamitsav 2026 winner Finxcelerate.}
+\cvitem{Volunteering}{NSS at SMVDU, Vikalp (A student initiative to educate unpriviledge kids), Ekatva Fest team 2025 and 2026, Udyamitsav 2026 IIT Jammu}
+\cvitem{Skills}{Communication \& Collaboration, Event Management, book fair}
 
 \end{document}
