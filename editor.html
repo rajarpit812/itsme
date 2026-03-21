@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dcrlp6ryj/image/upload/v1752761651/Gemini_Generated_Image_at81xmat81xmat81_ypkyiq.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor — Arpit Raj</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- CodeMirror 6 via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@codemirror/lang-javascript@6/dist/index.cjs.min.js"
+        type="module"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --green-bg: rgba(63, 185, 80, 0.1);
+            --red: #f85149;
+            --red-bg: rgba(248, 81, 73, 0.1);
+            --yellow: #d29922;
+            --yellow-bg: rgba(210, 153, 34, 0.1);
+            --radius: 8px;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-heading: 'DM Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ───── Lock Screen ───── */
+        #lock-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg-primary);
+        }
+
+        .lock-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .lock-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .lock-card h1 {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .lock-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .lock-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .lock-input:focus {
+            border-color: var(--accent);
+        }
+
+        .lock-btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lock-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .lock-error {
+            color: var(--red);
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ───── Editor Layout ───── */
+        #editor-app {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        #editor-app.active {
+            display: flex;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            gap: 12px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .topbar-file {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .status-badge.idle {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .status-badge.saving {
+            background: var(--yellow-bg);
+            color: var(--yellow);
+        }
+
+        .status-badge.ok {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .status-badge.err {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #2ea043;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* PAT Config Bar */
+        .config-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .config-bar label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .config-input {
+            flex: 1;
+            max-width: 500px;
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: var(--font-mono);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .config-input:focus {
+            border-color: var(--accent);
+        }
+
+        .config-info {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Editor Area */
+        .editor-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #latex-editor {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.7;
+            padding: 20px 24px;
+            border: none;
+            outline: none;
+            resize: none;
+            tab-size: 4;
+            -moz-tab-size: 4;
+            overflow-y: auto;
+        }
+
+        #latex-editor::selection {
+            background: rgba(88, 166, 255, 0.3);
+        }
+
+        /* Scrollbar */
+        #latex-editor::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #latex-editor::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        #latex-editor::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        #latex-editor::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Line numbers gutter */
+        .editor-wrapper {
+            display: flex;
+            height: 100%;
+        }
+
+        #line-numbers {
+            width: 56px;
+            flex-shrink: 0;
+            padding: 20px 12px 20px 0;
+            text-align: right;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Bottom Status Bar */
+        .statusbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .statusbar-left,
+        .statusbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 20px;
+            font-size: 13px;
+            color: var(--text-primary);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(120%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 8px 12px;
+            }
+
+            .topbar-file {
+                display: none;
+            }
+
+            .config-bar {
+                flex-wrap: wrap;
+            }
+
+            .config-input {
+                max-width: 100%;
+            }
+
+            .config-info {
+                display: none;
+            }
+        }
+
+        /* Keyboard shortcut hint */
+        kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════ LOCK SCREEN ═══════════ -->
+    <div id="lock-screen">
+        <div class="lock-card">
+            <div class="lock-icon">🔒</div>
+            <h1>Resume Editor</h1>
+            <p>This page is private. Enter your password to continue.</p>
+            <input type="password" id="lock-password" class="lock-input" placeholder="Password" autofocus>
+            <button id="lock-submit" class="lock-btn">Unlock</button>
+            <p id="lock-error" class="lock-error">Incorrect password. Try again.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════ EDITOR APP ═══════════ -->
+    <div id="editor-app">
+
+        <!-- Top bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-title">📝 Resume Editor</span>
+                <span class="topbar-file">resume/main.tex</span>
+            </div>
+            <div class="topbar-right">
+                <div id="status-badge" class="status-badge idle">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Ready</span>
+                </div>
+                <button id="btn-load" class="btn btn-secondary" title="Load latest from GitHub">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path
+                            d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 4.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                    </svg>
+                    Pull Latest
+                </button>
+                <button id="btn-save" class="btn btn-primary" title="Ctrl/⌘ + S" disabled>
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path
+                            d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v7.793L4.854 6.646a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l3.5-3.5a.5.5 0 0 0-.708-.708L8.5 9.293V1.5z" />
+                    </svg>
+                    Save & Deploy
+                </button>
+            </div>
+        </div>
+
+        <!-- GitHub PAT config bar -->
+        <div class="config-bar">
+            <label for="pat-input">GitHub PAT:</label>
+            <input type="password" id="pat-input" class="config-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            <span class="config-info">Token is stored in memory only — never persisted. <kbd>⌘S</kbd> to save.</span>
+        </div>
+
+        <!-- Editor area -->
+        <div class="editor-container">
+            <div class="editor-wrapper">
+                <div id="line-numbers"></div>
+                <textarea id="latex-editor" spellcheck="false" autocapitalize="off" autocomplete="off"
+                    autocorrect="off"></textarea>
+            </div>
+        </div>
+
+        <!-- Bottom status bar -->
+        <div class="statusbar">
+            <div class="statusbar-left">
+                <span id="cursor-pos">Ln 1, Col 1</span>
+                <span>LaTeX</span>
+                <span>UTF-8</span>
+            </div>
+            <div class="statusbar-right">
+                <span id="char-count">0 chars</span>
+                <span id="line-count">0 lines</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // ── Configuration ──────────────────────────────────────────
+            // Change these to match your GitHub repo:
+            const GITHUB_OWNER = 'rajarpit812';       // GitHub username
+            const GITHUB_REPO = 'itsme';             // Repository name
+            const FILE_PATH = 'resume/main.tex';    // Path within repo
+            const BRANCH = 'main';               // Branch name
+
+            // SHA-256 hash of the editor password (default: "arpit2026")
+            // To change: run `echo -n "yourpassword" | shasum -a 256` in terminal
+            const PASSWORD_HASH = 'edaf59359b1d552536d2b08079023f4b2ac6824632ba3547a17d6dae3315eaeb';
+
+            // ── DOM Elements ───────────────────────────────────────────
+            const lockScreen = document.getElementById('lock-screen');
+            const lockPwdInput = document.getElementById('lock-password');
+            const lockSubmit = document.getElementById('lock-submit');
+            const lockError = document.getElementById('lock-error');
+            const editorApp = document.getElementById('editor-app');
+            const editorEl = document.getElementById('latex-editor');
+            const lineNumsEl = document.getElementById('line-numbers');
+            const patInput = document.getElementById('pat-input');
+            const btnSave = document.getElementById('btn-save');
+            const btnLoad = document.getElementById('btn-load');
+            const statusBadge = document.getElementById('status-badge');
+            const statusText = document.getElementById('status-text');
+            const cursorPos = document.getElementById('cursor-pos');
+            const charCount = document.getElementById('char-count');
+            const lineCount = document.getElementById('line-count');
+            const toast = document.getElementById('toast');
+
+            let fileSha = null; // Required by GitHub API for updates
+            let isDirty = false;
+
+            // ── Utility: SHA-256 hash ──────────────────────────────────
+            async function sha256(message) {
+                const msgBuffer = new TextEncoder().encode(message);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+
+            // ── Lock Screen ────────────────────────────────────────────
+            async function unlock() {
+                const pwd = lockPwdInput.value;
+                const hash = await sha256(pwd);
+                if (hash === PASSWORD_HASH) {
+                    lockScreen.style.display = 'none';
+                    editorApp.classList.add('active');
+                    editorEl.focus();
+                    updateLineNumbers();
+                } else {
+                    lockError.style.display = 'block';
+                    lockPwdInput.value = '';
+                    lockPwdInput.focus();
+                    lockPwdInput.classList.add('shake');
+                    setTimeout(() => lockPwdInput.classList.remove('shake'), 500);
+                }
+            }
+
+            lockSubmit.addEventListener('click', unlock);
+            lockPwdInput.addEventListener('keydown', e => {
+                if (e.key === 'Enter') unlock();
+                lockError.style.display = 'none';
+            });
+
+            // ── PAT validation ─────────────────────────────────────────
+            patInput.addEventListener('input', () => {
+                btnSave.disabled = !patInput.value.trim();
+            });
+
+            // ── Line Numbers ───────────────────────────────────────────
+            function updateLineNumbers() {
+                const lines = editorEl.value.split('\n').length;
+                let html = '';
+                for (let i = 1; i <= lines; i++) {
+                    html += i + '\n';
+                }
+                lineNumsEl.textContent = html;
+                lineCount.textContent = lines + ' lines';
+                charCount.textContent = editorEl.value.length + ' chars';
+            }
+
+            // Sync scroll between editor and line numbers
+            editorEl.addEventListener('scroll', () => {
+                lineNumsEl.scrollTop = editorEl.scrollTop;
+            });
+
+            editorEl.addEventListener('input', () => {
+                updateLineNumbers();
+                isDirty = true;
+            });
+
+            // Cursor position
+            editorEl.addEventListener('click', updateCursor);
+            editorEl.addEventListener('keyup', updateCursor);
+            function updateCursor() {
+                const val = editorEl.value;
+                const pos = editorEl.selectionStart;
+                const upToPos = val.substring(0, pos);
+                const line = upToPos.split('\n').length;
+                const col = pos - upToPos.lastIndexOf('\n');
+                cursorPos.textContent = `Ln ${line}, Col ${col}`;
+            }
+
+            // Tab support
+            editorEl.addEventListener('keydown', e => {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = editorEl.selectionStart;
+                    const end = editorEl.selectionEnd;
+                    editorEl.value = editorEl.value.substring(0, start) + '    ' + editorEl.value.substring(end);
+                    editorEl.selectionStart = editorEl.selectionEnd = start + 4;
+                    updateLineNumbers();
+                }
+            });
+
+            // ── Status Badge ───────────────────────────────────────────
+            function setStatus(type, text) {
+                statusBadge.className = 'status-badge ' + type;
+                statusText.textContent = text;
+            }
+
+            // ── Toast ──────────────────────────────────────────────────
+            function showToast(message, duration = 3000) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), duration);
+            }
+
+            // ── GitHub API: Load file ──────────────────────────────────
+            async function loadFromGitHub() {
+                const pat = patInput.value.trim();
+                if (!pat) {
+                    showToast('⚠️ Enter your GitHub PAT first');
+                    patInput.focus();
+                    return;
+                }
+
+                setStatus('saving', 'Loading…');
+                try {
+                    const res = await fetch(
+                        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}?ref=${BRANCH}`,
+                        { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } }
+                    );
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.message || res.statusText);
+                    }
+
+                    const data = await res.json();
+                    fileSha = data.sha;
+
+                    // Decode Base64 content
+                    const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+                    editorEl.value = content;
+                    updateLineNumbers();
+                    updateCursor();
+                    isDirty = false;
+
+                    setStatus('ok', 'Loaded from GitHub');
+                    showToast('✅ Loaded latest resume/main.tex');
+                } catch (err) {
+                    setStatus('err', 'Load failed');
+                    showToast('❌ ' + err.message);
+                    console.error('Load error:', err);
+                }
+            }
+
+            btnLoad.addEventListener('click', loadFromGitHub);
+
+            // ── GitHub API: Save file ──────────────────────────────────
+            async function saveToGitHub() {
+                const pat = patInput.value.trim();
+                if (!pat) {
+                    showToast('⚠️ Enter your GitHub PAT first');
+                    patInput.focus();
+                    return;
+                }
+
+                setStatus('saving', 'Saving…');
+                btnSave.disabled = true;
+
+                try {
+                    // If we don't have the sha yet, fetch it first
+                    if (!fileSha) {
+                        const getRes = await fetch(
+                            `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}?ref=${BRANCH}`,
+                            { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } }
+                        );
+                        if (getRes.ok) {
+                            const getData = await getRes.json();
+                            fileSha = getData.sha;
+                        }
+                        // If 404, file doesn't exist yet — no sha needed for creation
+                    }
+
+                    // Encode content to Base64
+                    const content = btoa(unescape(encodeURIComponent(editorEl.value)));
+
+                    const body = {
+                        message: 'update: resume LaTeX source [from editor]',
+                        content: content,
+                        branch: BRANCH,
+                    };
+                    if (fileSha) body.sha = fileSha;
+
+                    const res = await fetch(
+                        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${pat}`,
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(body),
+                        }
+                    );
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.message || res.statusText);
+                    }
+
+                    const result = await res.json();
+                    fileSha = result.content.sha; // Update sha for next save
+                    isDirty = false;
+
+                    setStatus('ok', 'Saved & deploying…');
+                    showToast('✅ Committed! GitHub Actions will compile the PDF in ~1-2 min.');
+
+                    // After a delay, update status to indicate the pipeline is running
+                    setTimeout(() => {
+                        if (!isDirty) setStatus('ok', 'Deployed');
+                    }, 5000);
+
+                } catch (err) {
+                    setStatus('err', 'Save failed');
+                    showToast('❌ ' + err.message);
+                    console.error('Save error:', err);
+                } finally {
+                    btnSave.disabled = !patInput.value.trim();
+                }
+            }
+
+            btnSave.addEventListener('click', saveToGitHub);
+
+            // ── Keyboard Shortcut: Ctrl/⌘ + S ─────────────────────────
+            document.addEventListener('keydown', e => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    if (!btnSave.disabled) saveToGitHub();
+                }
+            });
+
+            // ── Warn before leaving with unsaved changes ───────────────
+            window.addEventListener('beforeunload', e => {
+                if (isDirty) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+
+            // ── Initialize ─────────────────────────────────────────────
+            updateLineNumbers();
+
+        })();
+    </script>
+
+</body>
+
+</html>

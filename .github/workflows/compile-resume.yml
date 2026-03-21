@@ -1,0 +1,38 @@
+name: Compile Resume (LaTeX → PDF)
+
+on:
+  push:
+    paths:
+      - 'resume/**'
+  workflow_dispatch:          # Allow manual trigger from the Actions tab
+
+permissions:
+  contents: write             # Needed to commit the compiled PDF back
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX → PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume/main.tex
+          # Uses latexmk under the hood; compiles to resume/main.pdf
+
+      - name: Move compiled PDF to assets/
+        run: |
+          mkdir -p assets
+          cp resume/main.pdf assets/resume.pdf
+
+      - name: Commit & push updated PDF
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/resume.pdf
+          # Only commit if the PDF actually changed
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: auto-compile resume PDF [skip ci]"
+          git push
