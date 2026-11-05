@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fusion 360 CAD designs and mechanical projects by Arpit Raj. Explore public 3D models and download options.">
+    <meta name="theme-color" content="#F8F8F7">
+    <title>Arpit Raj — CAD & Mechanical Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family:'Inter',sans-serif; background:#F8F8F7; color:#1a1a1a; }
+        h1,h2,h3,h4,h5,h6 { font-family:'DM Sans',sans-serif; }
+        .model-card { background:#fff; border:1px solid #EAEAEA; transition:transform .25s ease,box-shadow .25s ease; }
+        .model-card:hover { transform:translateY(-4px); box-shadow:0 10px 20px rgba(0,0,0,.05); }
+        @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="fixed top-0 left-0 right-0 z-20 bg-[#F8F8F7]/90 backdrop-blur-sm">
+        <div class="container mx-auto px-6 md:px-10 py-5 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold tracking-wide">Arpit Raj</a>
+            <nav class="flex items-center gap-4 md:gap-6 text-sm md:text-base" aria-label="Main navigation">
+                <a href="index.html#projects" class="text-stone-600 hover:text-black">Work</a>
+                <a href="cad.html" aria-current="page" class="text-black font-semibold">CAD</a>
+                <a href="resume.html" class="text-stone-600 hover:text-black">Resume</a>
+                <a href="index.html#contact" class="text-stone-600 hover:text-black">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 md:px-10 pt-32 pb-24">
+        <section>
+            <p class="text-sm uppercase tracking-[0.16em] text-stone-500 mb-2">Fusion 360 · Mechanical design</p>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-5 mb-10">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold">CAD & Mechanical Design</h1>
+                    <p class="text-stone-600 mt-3 max-w-2xl leading-relaxed">A collection of mechanical components, drone parts, mounts and enclosures designed in Autodesk Fusion.</p>
+                </div>
+                <span class="text-sm text-stone-500 whitespace-nowrap">STL · STEP · Fusion 360</span>
+            </div>
+
+            <div id="models-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <div id="empty-state" class="border border-dashed border-stone-300 rounded-lg p-8 md:p-12 text-center">
+                <h2 class="text-xl font-semibold">CAD projects will appear here</h2>
+                <p class="text-stone-500 mt-2 max-w-xl mx-auto">Add a preview render and a public Fusion 360 share link for each design. You can keep the original CAD gallery private until you're ready to publish specific models.</p>
+            </div>
+        </section>
+
+        <section class="mt-16 border-t border-stone-200 pt-8">
+            <h2 class="text-xl font-semibold mb-3">About model downloads</h2>
+            <p class="text-stone-600 leading-relaxed max-w-3xl">Each model opens in the Fusion web viewer. When creating its public share link, enable <strong>Allow item to be downloaded</strong>. Visitors can then use the viewer's Download menu to request an available CAD export format, including STL or STEP where supported. Fusion sends the generated download link by email (Autodesk documents a seven-day validity period); this is not the same as a direct, instant .stl or .step file URL.</p>
+        </section>
+    </main>
+
+    <footer class="py-16">
+        <div class="container mx-auto px-6 md:px-10 border-t border-stone-200 pt-8 flex flex-col md:flex-row justify-between gap-5">
+            <div>
+                <h2 class="text-2xl font-bold mb-3">Let's work together.</h2>
+                <a href="mailto:rajrpit812@gmail.com" class="text-stone-600 hover:text-black underline underline-offset-4">rajrpit812@gmail.com</a>
+                <div class="mt-3 flex gap-5 text-sm">
+                    <a href="https://www.linkedin.com/in/arpit420/" target="_blank" rel="noopener noreferrer" class="text-stone-600 hover:text-black">LinkedIn ↗</a>
+                    <a href="https://github.com/rajarpit812" target="_blank" rel="noopener noreferrer" class="text-stone-600 hover:text-black">GitHub ↗</a>
+                </div>
+            </div>
+            <p class="text-sm text-stone-500">© <span id="year"></span> Arpit Raj</p>
+        </div>
+    </footer>
+
+    <script>
+        /*
+         * Add one object per public model.
+         * preview: relative path to a render/image committed to the site (e.g. assets/cad/camera-mount.jpg)
+         * fusionUrl: copied from Fusion > Share Link after enabling public access.
+         * stlUrl / stepUrl are optional direct file links only if you later host exports separately.
+         */
+        const cadModels = [
+            // {
+            //     title: "Drone Camera Mount",
+            //     category: "Drone component",
+            //     description: "Custom mount designed for a camera and sensor assembly.",
+            //     preview: "assets/cad/drone-camera-mount.jpg",
+            //     fusionUrl: "https://a360.co/your-public-share-link",
+            //     stlUrl: "",   // Optional direct file URL; leave blank to use Fusion download menu.
+            //     stepUrl: ""   // Optional direct file URL; leave blank to use Fusion download menu.
+            // }
+        ];
+
+        const grid = document.getElementById('models-grid');
+        const emptyState = document.getElementById('empty-state');
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function httpsUrl(value) {
+            try {
+                const parsed = new URL(value, window.location.href);
+                return parsed.protocol === 'https:' ? parsed.href : '';
+            } catch {
+                return '';
+            }
+        }
+
+        function createText(tag, className, value) {
+            const element = document.createElement(tag);
+            element.className = className;
+            element.textContent = value || '';
+            return element;
+        }
+
+        function createLink(label, url, className = 'text-sm text-stone-600 hover:text-black underline underline-offset-4') {
+            const safeUrl = httpsUrl(url);
+            if (!safeUrl) return null;
+            const link = document.createElement('a');
+            link.href = safeUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = className;
+            link.textContent = label;
+            return link;
+        }
+
+        function renderModels() {
+            grid.replaceChildren();
+            emptyState.classList.toggle('hidden', cadModels.length > 0);
+
+            cadModels.forEach(model => {
+                const card = document.createElement('article');
+                card.className = 'model-card rounded-lg overflow-hidden';
+
+                const previewUrl = httpsUrl(model.preview);
+                if (previewUrl) {
+                    const image = document.createElement('img');
+                    image.src = previewUrl;
+                    image.alt = `${model.title || 'CAD design'} preview render`;
+                    image.loading = 'lazy';
+                    image.className = 'w-full aspect-[16/9] object-cover bg-stone-100';
+                    card.appendChild(image);
+                } else {
+                    const placeholder = createText('div', 'w-full aspect-[16/9] bg-stone-100 flex items-center justify-center text-stone-400 text-sm', 'Add a CAD preview render');
+                    card.appendChild(placeholder);
+                }
+
+                const content = document.createElement('div');
+                content.className = 'p-7';
+                content.append(
+                    createText('p', 'text-xs uppercase tracking-widest text-stone-400 mb-2', model.category || 'Fusion 360'),
+                    createText('h2', 'text-2xl font-bold mb-2', model.title || 'Untitled design'),
+                    createText('p', 'text-stone-600 leading-relaxed', model.description || '')
+                );
+
+                const links = document.createElement('div');
+                links.className = 'mt-5 flex flex-wrap gap-x-5 gap-y-3';
+                const fusionLink = createLink('View & download in Fusion 360 ↗', model.fusionUrl);
+                const stlLink = createLink('Direct STL download ↓', model.stlUrl);
+                const stepLink = createLink('Direct STEP download ↓', model.stepUrl);
+                [fusionLink, stlLink, stepLink].filter(Boolean).forEach(link => links.appendChild(link));
+                content.appendChild(links);
+                card.appendChild(content);
+                grid.appendChild(card);
+            });
+        }
+
+        renderModels();
+    </script>
+</body>
+</html>
