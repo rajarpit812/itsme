@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arpit Raj — Electronics and Communication Engineering student working across embedded systems, robotics, FPGA design, machine learning and mechanical CAD.">
+    <meta name="description" content="Arpit Raj — Electronics and Communication Engineering student working across embedded systems, robotics, FPGA design and machine learning.">
     <meta name="theme-color" content="#F8F8F7">
     <link rel="canonical" href="https://arpitraj.tech/">
     <title>Arpit Raj — Engineering Portfolio</title>
@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <meta property="og:title" content="Arpit Raj — Engineering Portfolio">
-    <meta property="og:description" content="Embedded systems, robotics, digital design and mechanical CAD.">
+    <meta property="og:description" content="Embedded systems, robotics, digital design and machine learning.">
     <meta property="og:url" content="https://arpitraj.tech/">
     <meta property="og:type" content="website">
 
@@ -42,7 +42,7 @@
             <a href="#about" class="text-xl font-bold tracking-wide" aria-label="Arpit Raj home">Arpit Raj</a>
             <nav class="site-nav flex items-center space-x-6" aria-label="Main navigation">
                 <a href="#projects" class="text-stone-600 hover:text-black transition-colors">Work</a>
-                <a href="#cad" class="text-stone-600 hover:text-black transition-colors">CAD</a>
+                <a href="cad.html" class="text-stone-600 hover:text-black transition-colors">CAD</a>
                 <a href="resume.html" class="text-stone-600 hover:text-black transition-colors">Resume</a>
                 <a href="#contact" class="text-stone-600 hover:text-black transition-colors">Contact</a>
             </nav>
@@ -61,7 +61,7 @@
                     I'm an Electronics and Communication Engineering student at Shri Mata Vaishno Devi University, interested in building systems that connect hardware and software.
                 </p>
                 <p class="text-lg md:text-xl text-stone-600 max-w-3xl mt-4 leading-relaxed">
-                    My work spans embedded systems, drone development, FPGA-based digital design, machine learning and mechanical CAD. I enjoy taking ideas from design through implementation, integration and testing.
+                    My work spans embedded systems, drone development, FPGA-based digital design and machine learning. I enjoy taking ideas from design through implementation, integration and testing.
                 </p>
                 <div class="mt-9 flex flex-wrap gap-x-6 gap-y-3">
                     <a href="https://github.com/rajarpit812" target="_blank" rel="noopener noreferrer" class="text-stone-600 hover:text-black underline underline-offset-4">GitHub ↗</a>
@@ -121,29 +121,7 @@
             <p class="text-sm text-stone-500 mt-6">More projects, technical details and supporting material are available in the <a href="my_work.html" class="underline underline-offset-4 hover:text-black">complete work archive</a>.</p>
         </section>
 
-        <!-- CAD GALLERY -->
-        <section id="cad" class="py-20 md:py-28 border-t border-stone-200">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-10 section-fade-in">
-                <div>
-                    <p class="text-sm uppercase tracking-[0.16em] text-stone-500 mb-2">Fusion 360 · Mechanical design</p>
-                    <h2 class="text-3xl md:text-4xl font-bold">CAD & Mechanical Design</h2>
-                    <p class="text-stone-600 mt-3 max-w-2xl">Selected components, enclosures and functional designs. Open a model in Fusion 360 or download the exchange files.</p>
-                </div>
-                <span class="text-sm text-stone-500">STL · STEP · Fusion 360</span>
-            </div>
 
-            <!--
-              Add your actual CAD models in the array below.
-              Fusion 360 share links are for viewing. For direct STL/STEP downloads,
-              upload the exported files to a public file host and paste their direct URLs.
-              Do not use a Fusion 360 viewer URL as an STL/STEP download URL.
-            -->
-            <div id="cadGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-            <p id="cadEmpty" class="hidden text-stone-500 border border-dashed border-stone-300 rounded-lg p-8 text-center">
-                CAD models will appear here soon.
-            </p>
-            <p class="text-xs text-stone-400 mt-6">Downloadable files are provided for design review and prototyping. Check dimensions, tolerances and print settings before fabrication.</p>
-        </section>
     </main>
 
     <!-- CONTACT -->
@@ -190,92 +168,7 @@
     </div>
 
     <script>
-        // Add real model links here. Keep empty strings until each file is uploaded.
-        const cadModels = [
-            // Example:
-            // {
-            //   title: "Drone Camera Mount",
-            //   category: "Drone component",
-            //   description: "Custom mount designed for a camera and sensor assembly.",
-            //   preview: "assets/cad/camera-mount-render.jpg",
-            //   fusionUrl: "https://a360.co/YOUR_PUBLIC_FUSION_LINK",
-            //   stlUrl: "https://YOUR_DIRECT_STL_FILE_URL",
-            //   stepUrl: "https://YOUR_DIRECT_STEP_FILE_URL"
-            // }
-        ];
-
-        const cadGrid = document.getElementById("cadGrid");
-        const cadEmpty = document.getElementById("cadEmpty");
-
-        function safeExternalLink(url) {
-            try {
-                const parsed = new URL(url);
-                return parsed.protocol === "https:" ? parsed.href : "";
-            } catch {
-                return "";
-            }
-        }
-
-        function addLink(container, label, url) {
-            const safeUrl = safeExternalLink(url);
-            if (!safeUrl) return;
-            const link = document.createElement("a");
-            link.href = safeUrl;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.className = "text-sm text-stone-600 hover:text-black underline underline-offset-4";
-            link.textContent = label;
-            container.appendChild(link);
-        }
-
-        function renderCadModels() {
-            cadGrid.replaceChildren();
-            cadEmpty.classList.toggle("hidden", cadModels.length !== 0);
-
-            cadModels.forEach((model) => {
-                const card = document.createElement("article");
-                card.className = "project-card rounded-lg overflow-hidden";
-
-                if (safeExternalLink(model.preview)) {
-                    const image = document.createElement("img");
-                    image.src = safeExternalLink(model.preview);
-                    image.alt = model.title ? `${model.title} CAD render` : "CAD model preview";
-                    image.loading = "lazy";
-                    image.className = "w-full aspect-[16/9] object-cover bg-stone-100";
-                    card.appendChild(image);
-                } else {
-                    const placeholder = document.createElement("div");
-                    placeholder.className = "w-full aspect-[16/9] bg-stone-100 flex items-center justify-center text-stone-400 text-sm";
-                    placeholder.textContent = "CAD render";
-                    card.appendChild(placeholder);
-                }
-
-                const body = document.createElement("div");
-                body.className = "p-7";
-                const category = document.createElement("p");
-                category.className = "text-xs uppercase tracking-widest text-stone-400 mb-2";
-                category.textContent = model.category || "Fusion 360";
-                const title = document.createElement("h3");
-                title.className = "text-2xl font-bold mb-2";
-                title.textContent = model.title || "Untitled design";
-                const description = document.createElement("p");
-                description.className = "text-stone-600 leading-relaxed";
-                description.textContent = model.description || "";
-
-                const links = document.createElement("div");
-                links.className = "flex flex-wrap gap-x-5 gap-y-3 mt-5";
-                addLink(links, "View in Fusion 360 ↗", model.fusionUrl);
-                addLink(links, "Download STL ↓", model.stlUrl);
-                addLink(links, "Download STEP ↓", model.stepUrl);
-
-                body.append(category, title, description, links);
-                card.appendChild(body);
-                cadGrid.appendChild(card);
-            });
-        }
-
         document.getElementById("year").textContent = new Date().getFullYear();
-        renderCadModels();
 
         const modal = document.getElementById("contactModal");
         const form = document.getElementById("contactForm");
